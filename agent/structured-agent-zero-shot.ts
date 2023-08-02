@@ -1,6 +1,6 @@
 import { AgentExecutor, initializeAgentExecutorWithOptions } from "langchain/agents";
 import { BaseLanguageModel } from "langchain/base_language";
-import { Callbacks } from "langchain/callbacks";
+import { BaseCallbackHandler, CallbackHandlerMethods, CallbackManager, Callbacks } from "langchain/callbacks";
 import { BaseChatModelParams } from "langchain/chat_models/base";
 import { AzureOpenAIInput, ChatOpenAI, OpenAIChatInput } from "langchain/chat_models/openai";
 import { BaseMemory, BufferWindowMemory } from "langchain/memory";
@@ -9,6 +9,7 @@ import { DynamicStructuredTool } from "langchain/tools";
 import { ChatbotHibrid } from "../chatbot/chatbot-hibrid";
 
 import { config } from "dotenv";
+import { BaseChatbot } from "../chatbot/base/base-chatbot";
 config()
 
 export class StructuredAgentZeroShot {
@@ -16,7 +17,7 @@ export class StructuredAgentZeroShot {
     private tools: DynamicStructuredTool[] = []
     private memory: BaseMemory | undefined = undefined
     private callbacks: Callbacks = []
-    private chatbot!: ChatbotHibrid
+    private chatbot: BaseChatbot | null = null
     private signalAbortMs = 5000
 
     constructor(
@@ -108,7 +109,7 @@ export class StructuredAgentZeroShot {
      * 
      * .addCallback(handleChainStart)
      */
-    addCallback(callback: any) {
+    addCallback(callback: CallbackManager | (BaseCallbackHandler | CallbackHandlerMethods)) {
         // @ts-ignore
         this.callbacks = [Object.assign(...this.callbacks, callback)]
 
@@ -140,9 +141,10 @@ export class StructuredAgentZeroShot {
         this.tools = this.tools.filter(tool => tool.name !== tool_name)
     }
 
-    addChatBot(chatBot: ChatbotHibrid) {
+    addChatBot<T>(chatBot: T) {
+        // @ts-ignore
         this.chatbot = chatBot
-
+        
         return this
     }
 

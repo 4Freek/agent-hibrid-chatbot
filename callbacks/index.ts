@@ -2,11 +2,6 @@ import { Callbacks } from "langchain/callbacks";
 
 export const CALLBACKS: Callbacks = [
     {
-        handleLLMStart(llm, prompts, runId, parentRunId, extraParams, tags, metadata) {
-            console.log("handleLLMStart", {
-                prompts,
-            })
-        },
         handleAgentAction(action) {
             const { tool, toolInput, log } = action;
             // console.log("\nhandleAgentAction", { tool, log });
@@ -24,7 +19,7 @@ export const CALLBACKS: Callbacks = [
             // console.log("\nhandleAgentEnd", action);
         },
         handleToolEnd(output) {
-            // console.log("\nhandleToolEnd", output);
+            console.log("\nhandleToolEnd", output);
         },
         handleToolError(error: Error) {
             console.log("\nhandleToolError", error);
