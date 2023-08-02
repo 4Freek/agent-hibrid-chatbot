@@ -11,33 +11,17 @@ const chatbot = new ChatbotHibrid('ron')
 .addCommand({
     key: 'foo',
     intents: ['foo'],
-    return_direct: false,
-    action: {
-        endpoint_url: 'foo',
-        method: 'GET',
-        name: 'foo',
-        validate_value_return: false
-    }
-
-}).useFunction((ctx) => {
-    console.log('hola desde', ctx.key)
-}).useFunction((ctx) => {
-    console.log('hola2 desde', ctx.key)
-})
-.addCommand({
-    key: 'detalles',
-    intents: ['precios', 'detalles', 'productos'],
-    return_direct: false,
-    action: {
-        endpoint_url: 'precios',
-        method: 'GET',
-        name: 'foo',
-        validate_value_return: false
-    }
-
+    default_message: 'cuanto es 2 + 2',
+    return_direct: true,
+}).addCapture(() => {
+    return { message: 'Indicame lo que necesitas' }
 })
 
-chatbot.call('foo')
+const inputs = ['foo', '3']
+
+for (const input of inputs) {
+    console.log(await chatbot.call(input))
+}
 
 export const run = async () => {
     const handleChainStart = {

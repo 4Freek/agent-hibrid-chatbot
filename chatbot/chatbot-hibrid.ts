@@ -1,4 +1,4 @@
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, combineAll } from "rxjs";
 import { httpClient } from "../services/http-client";
 import { Action, BaseChatbot, Callback, Commands, value_return } from "./base/base-chatbot";
 
@@ -9,6 +9,7 @@ export class ChatbotHibrid extends BaseChatbot {
 
     constructor(private bot_name: string) {
         super()
+        // this.ctx$.subscribe((value) => console.log('subscribing value:' ,{value}))
     }
 
     get name() { return this.bot_name; }
@@ -31,7 +32,7 @@ export class ChatbotHibrid extends BaseChatbot {
         const command = this.commands.find(c => c.key === possible_command || c.intents.includes(possible_command))
         
         if (!command) throw new Error(`Key: (${possible_command}) not found`)
-
+        
         if (return_intent) {
             return {
                 command,
@@ -66,8 +67,10 @@ export class ChatbotHibrid extends BaseChatbot {
         return { command, intent }
     }
 
-    addCapture(args: any) {
-        throw new Error(`addCapture not implemented`)
+    addCapture<T>(callback: Callback<T>) {
+        this.ctx.captureFunction = callback
+
+        return this
     }
 
     useFunction<T>(callback: Callback<T>) {
@@ -123,14 +126,16 @@ export class ChatbotHibrid extends BaseChatbot {
         if (intent) {
             input = input.replace(intent[0], '').trim()
         }
-
+        
+        console.log(this.ctx)
+        if (command.captureFunction) return command.captureFunction(this.ctx)
         command.fallbacks?.forEach(fallback => fallback(this.ctx))
         if (command?.action?.validate_value_return) value_return.parse(command.value_return)
 
-        console.log({
+        return {
             ...command,
             value_return: data || undefined
-        })
+        }
         
         // return 
         // await httpClient({

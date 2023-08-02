@@ -12,10 +12,12 @@ export const value_return = z.object({
 export type Commands = {
     key: string; // CLAVE DEL COMANDO
     intents: string[]; // ARRAY DE INTENTS
+    user_intent?: string;
     default_message?: string|null; // MENSAJE POR DEFECTO
     error_message?: string|undefined; // MENSAJE DE ERROR
     clean_expression?: RegExp; // PARA FUTURAS VALIDACIONES
     fallbacks?: any[];
+    captureFunction?: any|undefined;
     return_direct?: boolean; // DECIDE SI RETORNA DIRECTO UNA VEZ ENCUENTRE EL COMANDO
     value_return?: Partial<z.infer<typeof value_return>>; // VALIDA EL VALOR QUE RETORNA DE ACUERDO A SU TIPO DE DATO
     action?: Action // ACCION A REALIZAR
@@ -29,7 +31,7 @@ export type Action = {
     return_default?: string; // DECIDE SI RETORNA EL VALOR POR DEFECTO
 }
 
-export type Callback<T> = (ctx: Commands, err?: Error|unknown) => T;                                                                   
+export type Callback<T> = (ctx?: Commands, err?: Error|unknown) => T;                                                                   
 
 
 export abstract class BaseChatbot {
