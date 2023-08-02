@@ -1,4 +1,3 @@
-// { temperature: 0, openAIApiKey: "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" }
 import { StructuredAgentZeroShot } from "./agent/structured-agent-zero-shot";
 import { bufferWindowMemory } from "./memory/bufferWindowMemory";
 import { ticket } from "./tools/tools/ticket";
