@@ -19,6 +19,10 @@ const chatbot = new ChatbotHibrid('ron')
         validate_value_return: false
     }
 
+}).useFunction((ctx) => {
+    console.log('hola desde', ctx.key)
+}).useFunction((ctx) => {
+    console.log('hola2 desde', ctx.key)
 })
 .addCommand({
     key: 'detalles',
@@ -32,6 +36,8 @@ const chatbot = new ChatbotHibrid('ron')
     }
 
 })
+
+chatbot.call('foo')
 
 export const run = async () => {
     const handleChainStart = {
@@ -59,14 +65,14 @@ export const run = async () => {
     const executor = await agent.build_executor() // Se crea el ejecutor para pasarlo a la funcion call la cual necesita llamarlo
     const inputs = ["cual es el precio de los nike air 97"];
 
-    console.log("Loaded agent.");
-    for (const input of inputs) {
-        console.log(`Executing with input "${input}"...`);
+    // console.log("Loaded agent.");
+    // for (const input of inputs) {
+    //     console.log(`Executing with input "${input}"...`);
 
-        const output = await agent.call(input, executor);
+    //     const output = await agent.call(input, executor);
 
-        console.log({ output });
-    }
+    //     console.log({ output });
+    // }
 
 
     /*

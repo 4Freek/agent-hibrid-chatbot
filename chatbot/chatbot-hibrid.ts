@@ -1,4 +1,3 @@
-import { z } from "zod"
 import { BehaviorSubject } from "rxjs";
 import { httpClient } from "../services/http-client";
 import { Action, BaseChatbot, Callback, Commands, value_return } from "./base/base-chatbot";
@@ -72,7 +71,11 @@ export class ChatbotHibrid extends BaseChatbot {
     }
 
     useFunction<T>(callback: Callback<T>) {
-        this._commands = {...this.ctx, fallbacks: [callback]}
+        this._commands = {...this.ctx, fallbacks: [
+            this.ctx.fallbacks ? this.ctx?.fallbacks : [], 
+            callback
+        ].flat()
+    }
         return this
     }
 
