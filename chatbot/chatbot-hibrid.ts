@@ -33,6 +33,8 @@ export class ChatbotHibrid extends BaseChatbot {
         
         if (!command) throw new Error(`Key: (${possible_command}) not found`)
         
+        command.user_extra_intent = keyOrIntent.replace(possible_command, '').trim()
+
         if (return_intent) {
             return {
                 command,

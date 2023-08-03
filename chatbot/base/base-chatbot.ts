@@ -12,7 +12,7 @@ export const value_return = z.object({
 export type Commands = {
     key: string; // CLAVE DEL COMANDO
     intents: string[]; // ARRAY DE INTENTS
-    user_intent?: string;
+    user_extra_intent?: string|null;
     default_message?: string|null; // MENSAJE POR DEFECTO
     error_message?: string|undefined; // MENSAJE DE ERROR
     clean_expression?: RegExp; // PARA FUTURAS VALIDACIONES

@@ -13,15 +13,32 @@ const chatbot = new ChatbotHibrid('ron')
     intents: ['foo'],
     default_message: 'cuanto es 2 + 2',
     return_direct: true,
-}).addCapture(() => {
-    return { message: 'Indicame lo que necesitas' }
+})
+.useFunction((ctx, err) => {
+    if (err) {
+        throw new Error('error on fallback')
+    }
+    if (ctx?.user_extra_intent) {
+        const context = ctx.user_extra_intent.split(' ')
+        
+        console.log({
+            quantity: Number(context[0]),
+            products: context.slice(1, context.length).join(' ')
+        })
+
+    }
 })
 
-const inputs = ['foo', '3']
+const inputs = ['foo 2 nike air 97']
 
-for (const input of inputs) {
-    console.log(await chatbot.call(input))
+const t = async (input: string) => {
+    return chatbot.call(input).then((res) => res).catch(err => console.log(err.message))
 }
+for (const input of inputs) {
+    const e = await t(input)
+    console.log(e)
+}
+
 
 export const run = async () => {
     const handleChainStart = {
