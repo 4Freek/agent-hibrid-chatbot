@@ -1,7 +1,10 @@
+
 import { beforeAll, describe, expect, it, test } from 'bun:test'
 import { ChatbotHibrid } from '../chatbot/chatbot-hibrid'
 
-describe('addCapture', () => { 
+
+
+describe('useFunction return', () => { 
     let chatbot: any
     beforeAll(() => {
         chatbot = new ChatbotHibrid('pepitongo')
@@ -10,24 +13,22 @@ describe('addCapture', () => {
             intents: ['foo'],
             default_message: 'cuanto es 2 + 2',
             return_direct: true,
-        }).addCapture(() => {
-            return 'hola'
+            validate_value_return: true
+        }).useFunction((ctx: any, err: any) => {
+            throw new Error('fail useFunction')
         })
     })
 
-    test('should return same value that addCapture fallback', async () => {
-        expect(await chatbot.call('foo')).toEqual('hola')
-    })
 
-    test('should return a error Key: (tutu) not found', async () => {
+    test('should return a error fail useFunction', async () => {
         async function fail () {
             try {
-                return await chatbot.call('tutu')
+                return await chatbot.call('foo')
             }catch (err: any) {
                 return err.message
             }
         }
-        expect(await fail()).toEqual('Key: (tutu) not found')
+        expect(await fail()).toEqual('fail useFunction')
     })
 
  })
