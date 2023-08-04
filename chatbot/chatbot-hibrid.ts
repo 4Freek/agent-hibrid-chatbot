@@ -131,7 +131,13 @@ export class ChatbotHibrid extends BaseChatbot {
         
         console.log(this.ctx)
         if (command.captureFunction) return command.captureFunction(this.ctx)
-        command.fallbacks?.forEach(fallback => fallback(this.ctx))
+        command.fallbacks?.forEach(fallback => {
+            try {
+                return fallback(this.ctx)
+            }catch (e: any) {
+                return fallback(null, new Error(e.message))
+            }
+        })
         if (command?.action?.validate_value_return) value_return.parse(command.value_return)
 
         return {

@@ -35,12 +35,12 @@ export type Callback<T> = (ctx?: Commands, err?: Error|unknown) => T;
 
 
 export abstract class BaseChatbot {
-    // abstract addCapture(args: any[]): this   
+    // abstract addCapture(command: Commands): this   
     abstract addCommand(command: Commands): this
     abstract useFunction<T>(callback: Callback<T>): this
     abstract addIntentToCommand(key: string, intent: string): this
     abstract addActionToCommand(key: string, action: Action): this
 
 
-    abstract call(input: string, data: any): Promise<any>
+    abstract call(input: string, data?: any): Promise<any>
 }
